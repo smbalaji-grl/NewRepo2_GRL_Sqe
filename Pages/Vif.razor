@@ -1,0 +1,37 @@
+﻿@page "/VIF Supported UUTs"
+<input type= "text"  @bind ="location" placeholder = "enter file location"  />
+<input type= "text"   @bind = "Lkey" placeholder = "key" />
+<input type= "text"   @bind = "Rval" placeholder = "Value" />
+<button button  @onclick = "scanVif" > Get </button>
+<div>
+    @if(newlist != null && newlist.Count() != 0)
+    {
+        foreach (string uut in newlist)
+        {
+            <p>@uut.ToString();</p>
+        }
+    }
+    else
+    {
+        <p>@empty.ToString();</p>
+    }
+</div>
+
+@code 
+        {
+        public string? location{ get; set; }
+        public string? Lkey { get; set; }
+        public string? Rval{ get; set; }
+        List<string> newlist = new List<string>();
+        string empty = "No matched vifs";
+
+        public  void scanVif()
+        {
+            SupportedUUT sp = new SupportedUUT( location,Lkey,Rval);
+            string got = sp.modifyValue();
+            newlist =  sp.readFileAndsendList(got);
+        }
+
+
+
+}

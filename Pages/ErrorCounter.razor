@@ -1,0 +1,52 @@
+﻿@page "/ErrorCounter"
+
+<input type= "text"  @bind ="location" placeholder = "enter file location"  />
+<input type= "text"   @bind = "key" placeholder = "keyERROR" />
+<button button  @onclick ="Submit"   > Get </button>
+<div>
+  
+    @if (errorInfo != null)
+    {
+        Error answer;
+        foreach (int key in errorInfo.Keys)
+        {
+
+            bool results = errorInfo.TryGetValue(key, out answer);
+            if (results)
+            {
+               <p>@answer.ToString();</p> 
+            }
+            else
+            {
+                <p>@empty.ToString();</p>
+            }
+        }
+    }
+    else
+    {
+       <p>@empty.ToString();</p>
+    }
+</div>
+    
+
+
+
+
+@code {
+    public string? location { get; set; }
+    public string? key { get; set; }
+    string empty = "no error found";
+
+
+    Dictionary<int, Error> errorInfo = new Dictionary<int, Error>();
+    public void Submit()
+    {
+        TextFinder tx = new TextFinder(location, key);
+        List<string> listofDebuggFolders = tx.getDebugLoggerFiles();
+        errorInfo = tx.searchKeyWord(listofDebuggFolders);
+    }
+   }
+   
+
+   
+
